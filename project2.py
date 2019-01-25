@@ -221,7 +221,7 @@ conv_base = VGG16(weights='imagenet',
 conv_base.summary()
 
 
-#exit()
+
 #-------------------------------
 # III. FAST FEATURE EXTRACTION WITHOUT DATA AUGMENTATION
 #      Extracting features using the pre-trained convolutional base
