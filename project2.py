@@ -47,6 +47,7 @@ from keras import optimizers
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications import VGG16 # can import other image-classification models 
                                      # (all pretrained on the ImageNet dataset)
+from keras.applications.inception_v3 import InceptionV3
 
 from PIL import Image
 
@@ -214,11 +215,29 @@ print('created working directory base_dir/train,test,valid/01_TUMOR/,...,08_EMPT
 # This argument is purely optional: if you don’t pass it, the network will be able to 
 # process inputs of any size.
 
-conv_base = VGG16(weights='imagenet',
+# dimension1 in the last layer is 3 if Inception V3, 4 if VGG16
+# dimension2                     2048 if Inception V3, 512 if VGG16
+dim1 = 3
+dim2 = 2048
+
+
+
+modl = 'Inception_v3'
+#conv_base = VGG16(weights='imagenet',
+#                  include_top=False,
+#                  input_shape=(pix, pix, 3))
+
+
+
+
+conv_base = InceptionV3(weights='imagenet',
                   include_top=False,
                   input_shape=(pix, pix, 3))
 
 conv_base.summary()
+
+
+
 
 
 
@@ -258,7 +277,7 @@ datagen = ImageDataGenerator(rescale=1./255)
 
 def extract_features(directory, sample_count):
 
-    features = np.zeros(shape=(sample_count, 4, 4, 512)) 
+    features = np.zeros(shape=(sample_count, dim1, dim1, dim2)) 
     labels = np.zeros(shape=(sample_count,nb_classes))
      
 
@@ -316,9 +335,10 @@ print('test features',test_features.shape)
 print('reshape the features')
 # 512 is the last dimension of MaxPooling layer at the end of the CNN... 
 # reshape the training, validation, test data that were pretrained through the CNN
-train_features = np.reshape(train_features, (nb_train, 4 * 4 * 512))
-validation_features = np.reshape(validation_features, (nb_valid, 4 * 4 * 512))
-test_features = np.reshape(test_features, (nb_test, 4 * 4 * 512))
+
+train_features = np.reshape(train_features, (nb_train, dim1 * dim1 * dim2))
+validation_features = np.reshape(validation_features, (nb_valid, dim1 * dim1 * dim2))
+test_features = np.reshape(test_features, (nb_test, dim1 * dim1 * dim2))
 #---
 # define and train the densely connected classifier
 # then plot
@@ -339,7 +359,7 @@ print('next: Now we will define and train the densely connected classifier')
 
 
 model = models.Sequential()
-model.add(layers.Dense(256, activation='relu', input_dim=4 * 4 * 512))
+model.add(layers.Dense(256, activation='relu', input_dim=dim1 * dim1 * dim2))
 model.add(layers.Dropout(0.5))
 model.add(layers.Dense(8, activation='sigmoid'))
 
@@ -366,7 +386,7 @@ plt.title('Training and validation accuracy')
 plt.plot(epochs, acc, 'bo', label='Training acc')
 plt.plot(epochs, val_acc, 'b', label='Validation acc')
 plt.legend()
-plt.savefig('firstCNNofMylene_accuracy.png')
+plt.savefig('firstCNNofMylene_accuracy_'+str(modl)+'.png')
 
 
 
@@ -377,7 +397,7 @@ plt.plot(epochs, loss, 'bo', label='Training loss')
 plt.plot(epochs, val_loss, 'b', label='Validation loss')
 plt.title('Training and validation loss')
 plt.legend()
-plt.savefig('firstCNNofMylene_loss.png')
+plt.savefig('firstCNNofMylene_loss'+str(modl)+'.png')
 
 #plt.show()
 
