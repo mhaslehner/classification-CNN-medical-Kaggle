@@ -104,7 +104,7 @@ else:
 # include_top ..refers to including (or not) the densely connected classifier on top of the
 # network. By default, this densely connected classifier corresponds to the 1,000 classes 
 # from ImageNet. Because you intend to use your own densely connected classifier 
-# (with only two classes: cat and dog), you don’t need to include it.
+# you don’t need to include it.
 # input_shape... is the shape of the image tensors that you’ll feed to the network.
 # This argument is purely optional: if you don’t pass it, the network will be able to 
 # process inputs of any size.
