@@ -18,47 +18,46 @@ Citation: Kather JN, Weis CA, Bianconi F, Melchers SM, Schad LR, Gaiser T, Marx 
 analysis in colorectal cancer histology (2016)
 
 
-### II. The model (VGG16 base)
+### II. The model architecture (VGG16 base)
 
 I use a pre-trained VGG16 model base and add a densely connected classifier 
-(DC) on top of it. In this way, it is possible to save computation time by 
-using the pre-trained weights from the model base as input weights to 
+(DC) on top of it. The classification is done in a last densely connected classifier
+which is trained on the labelled data. In this way, it is possible to save 
+computation time by using the pre-trained weights from the model base as input weights to 
 the training of the data, instead of having to train the weights from scratch.
 
 First, 'features' (predictions) are extracted from the model base by running 
-the training images only once through the model base. Then, 
-the resulting output is used as input to a densely connected classifier followed
-by a layer of dropout regularization, which is trained on the labeled data.
+the training images only once through the model base. Then, the resulting output is used 
+as input to a densely connected classifier (using Relu function), followed by a layer of 
+dropout regularization. The last densely connected classifier (using a sigmoid 
+function) finally trains the images on the 8 categories of labelled data. 
+Dropout regularization removes outcomes of the densely connected classifier if its
+probability exceeds a given threshold (see below).
+For the optimization, an RMSprop is used as optimizer and a categorical crossentropy 
+as loss function.
+
+The dataset of 5000 images is distributed evenly over the 8 classes, so that each class 
+contains 625 images. For each class, the images are split into 425 training, 100 
+validation and 100 test images.  
+
+We vary the number of nodes in the densely connected classifier as well as the dropout 
+regularization threshold.  
 
 
-
--------
-
-Recall:
- dimension1 in the last layer is 3 if Inception V3, 4 if VGG16
- dimension2                     2048 if Inception V3, 512 if VGG16
-
- changeable (hyper-)parameters:
-nb_epochs = 300
-nodes_in_lastlayer1 = 60
-nodes_in_lastlayer2 = 0 #20 #500 # 300
-dropout1 = 0.55
-dropout2 = 0.5
-
-model = models.Sequential()
-model.add(layers.Dense(nodes_in_lastlayer1, activation='relu', input_dim=dim1 * dim1 * dim2))
-model.add(layers.Dropout(dropout1))
-
-model.add(layers.Dense(8, activation='sigmoid'))
-model.compile(optimizer=optimizers.RMSprop(lr=2e-5), # optimizer could be 'adam'
-              loss='categorical_crossentropy',            # loss could be 'categorical_crossentropy'
-              metrics=['acc'])
-history = model.fit(train_features, train_labels,
-                    epochs=nb_epochs,
-                    batch_size=batch_size,
-                    validation_data=(validation_features, validation_labels))
+|  fixed features of the CNN |  |
+|----- |-----   | 
+|  total nb of images (per class)|   625     |
+|  nb of training images (per class)|  425      |
+|  nb of validation images (per class)|  100    |
+|  nb of test images (per class)|  100    |
+|  nb of images per batch (for validation) | 25      |
+| nb of epochs  |  250     |
 
 
+|  hyperparameters |  |
+|----- |-----   | 
+| nb of nodes   | 50, 55, 60 |
+| dropout threshold   | 0.5, 0.55, 0.60 |
 
  
  from which I extract the weights  and stack additional layer to   
@@ -66,6 +65,13 @@ he densely connected classifier on top of the
 
 ### III. Results: The accuracy of the model varies with different hyperparameters 
 
+###### 50 nodes and dropout probability 0.5 
+
+![Test 50nodes](Nodes 50 layer 1/Accuracy_VGG16_nodesL1_50_nodesL2_0_epochs250_dropout0.5.png)
 
 
-![Test 60nodes](Test_Accuracy_VGG16_nodesL1_60_nodesL2_0_epochs250_dropout0_55.png)
+###### 55 nodes and dropout probability 0.5 
+![Test 55nodes](Nodes 55 layer 1/Accuracy_VGG16_nodesL1_55_nodesL2_0_epochs250_dropout0.5.png)
+
+
+
