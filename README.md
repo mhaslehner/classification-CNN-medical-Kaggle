@@ -13,6 +13,10 @@ The dataset contains 8 distinct classes (named 'tumor', 'stroma', 'complex', 'ly
 'mucosa', 'adipose' and 'empty'). Each image corresponds to one class, and each 
 class contains 625 images. 
 
+A typical image looks like 
+
+![cancerim](tumor_pic.png) ![cancerim](stroma_pic.png) ![cancerim](complex_pic.png) ![cancerim](lympho_pic.png) 
+![cancerim](debris_pic.png) ![cancerim](mucosa_pic.png) ![cancerim](adipose_pic.png) ![cancerim](empty_pic.png)
 
 Citation: Kather JN, Weis CA, Bianconi F, Melchers SM, Schad LR, Gaiser T, Marx A, Zollner F: Multi-class texture 
 analysis in colorectal cancer histology (2016)
@@ -120,3 +124,8 @@ Run the script `project2.py` to .......
 The script `create_folders.py` creates ....
 
 After running `project2.py`, the file such as `Accuracy_VGG16_....` will be created, showing the graph ...
+
+Remark: 
+
+
+![cancerim](larger_pic.png) 
