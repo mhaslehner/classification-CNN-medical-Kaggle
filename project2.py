@@ -96,7 +96,7 @@ else:
     
      
 # ----------------------------------------------------------------------------------------
-# II. Instantiating the VGG176 model (for the use of a pre-trained model)
+# II. Instantiating the VGG16 model (for the use of a pre-trained model)
 #-----------------------------------------------------------------------------------------
  
 # 

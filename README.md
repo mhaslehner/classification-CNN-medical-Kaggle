@@ -13,7 +13,7 @@ The dataset contains 8 distinct classes (named 'tumor', 'stroma', 'complex', 'ly
 'mucosa', 'adipose' and 'empty'). Each image corresponds to one class, and each 
 class contains 625 images. 
 
-A typical image looks like 
+A typical image for each of the above categories respectively looks like 
 
 ![cancerim](tumor_pic.png) ![cancerim](stroma_pic.png) ![cancerim](complex_pic.png) ![cancerim](lympho_pic.png) 
 ![cancerim](debris_pic.png) ![cancerim](mucosa_pic.png) ![cancerim](adipose_pic.png) ![cancerim](empty_pic.png)
@@ -119,13 +119,31 @@ accuracy.
 ### IV. Scripts
 
 
-Run the script `project2.py` to .......
+The script `create_folders.py` creates the working (training, validation and test) directories
+(using the class CreateFolders) if they do not yet exist or reads in the images from the 
+directories if they already exist. 
 
-The script `create_folders.py` creates ....
+Run the script `project2.py` to 
+1) call the class CreateFolders 
+2) instantiate the VGG16 model base 
+3) extract the features from the pretrained model using `conv_base.predict()`
+4) define and train the densely connected classifier and train it on the labeled data
+5) plot the accuracy as a function of time 
 
-After running `project2.py`, the file such as `Accuracy_VGG16_....` will be created, showing the graph ...
 
-Remark: 
+After running `project2.py`, a .png file such as `Accuracy_VGG16_....` will be created, 
+showing the graph.
+
+Remark: The present images - available on the Kaggle website - used for this CNN 
+have a low resolution (150x150 pixels). Unfortunately, no images with higher resolution are 
+available. The classification performance of the convolutional neural network might be increased
+by using images of higher resolution.
+
+An example of a 1000x1000 would look like this:   
 
 
 ![cancerim](larger_pic.png) 
+
+### Acknowledgements
+
+Thank you to JN Kather for making the dataset of colon carcinoma images available.
