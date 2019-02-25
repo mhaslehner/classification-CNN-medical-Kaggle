@@ -262,21 +262,16 @@ model = models.Sequential()
 model.add(layers.Dense(nodes_in_lastlayer1, activation='relu', input_dim=dim1 * dim1 * dim2))
 model.add(layers.Dropout(dropout1))
 
-
 #model.add(layers.Dense(nodes_in_lastlayer2, activation='relu', input_dim=dim1 * dim1 * dim2))
 #model.add(layers.Dropout(dropout2))
-
-#model.add(layers.Dense(nodes_in_lastlayer2, activation='relu', input_dim=dim1 * dim1 * dim2))
-#model.add(layers.Dropout(dropout2))
-
-
-
-
 
 model.add(layers.Dense(8, activation='sigmoid'))
+
+
 model.compile(optimizer=optimizers.RMSprop(lr=2e-5), # optimizer could be 'adam'
               loss='categorical_crossentropy',            # loss could be 'categorical_crossentropy'
               metrics=['acc'])
+
 history = model.fit(train_features, train_labels,
                     epochs=nb_epochs,
                     batch_size=batch_size,
